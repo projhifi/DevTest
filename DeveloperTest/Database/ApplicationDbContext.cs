@@ -7,6 +7,7 @@ namespace DeveloperTest.Database
     public class ApplicationDbContext : DbContext
     {
         public DbSet<Job> Jobs { get; set; }
+        public DbSet<Customer> Customers { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -30,6 +31,29 @@ namespace DeveloperTest.Database
                     JobId = 1,
                     Engineer = "Test",
                     When = DateTime.Now
+                });
+
+            modelBuilder.Entity<Customer>()
+                .Property(prop => prop.CustomerName)
+                .IsRequired();
+
+            modelBuilder.Entity<Customer>()
+                .Property(prop => prop.CustomerType)
+                .IsRequired();
+
+            modelBuilder.Entity<Customer>()
+                .HasKey(customer => customer.CustomerId);
+
+            modelBuilder.Entity<Customer>()
+                .Property(customer => customer.CustomerId)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Customer>()
+                .HasData(new Customer
+                {
+                    CustomerId = 1,
+                    CustomerName = "Example Company Ltd",
+                    CustomerType = "Large"
                 });
         }
     }
